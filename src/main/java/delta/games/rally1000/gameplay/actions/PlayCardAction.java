@@ -31,4 +31,16 @@ public class PlayCardAction extends AbstractAction
     //System.out.println("Carte jouée :"+card+" sur jeu "+shownCards);
     shownCards.putCard(card, false);
   }
+  
+  @Override
+  public String toString()
+  {
+    StringBuilder sb=new StringBuilder();
+    sb.append("Play card [");
+    sb.append(getCard());
+    sb.append("] for team [");
+    sb.append(_team);
+    sb.append("]");
+    return sb.toString();
+  }
 }

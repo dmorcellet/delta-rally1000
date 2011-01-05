@@ -18,8 +18,17 @@ public class DiscardAction extends AbstractAction
   public void doIt(Game game)
   {
     Card card=getCard();
-    System.out.println("Carte défaussée :"+card);
     PilesManager pilesManager=game.getPilesManager();
     pilesManager.discard(card);
+  }
+
+  @Override
+  public String toString()
+  {
+    StringBuilder sb=new StringBuilder();
+    sb.append("Discard card [");
+    sb.append(getCard());
+    sb.append("]");
+    return sb.toString();
   }
 }
