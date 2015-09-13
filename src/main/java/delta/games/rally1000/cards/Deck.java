@@ -1,7 +1,6 @@
 package delta.games.rally1000.cards;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -100,10 +99,8 @@ public class Deck
   {
     _cards.clear();
     List<CardModel> models=_model.getCardModels();
-    CardModel cardModel;
-    for(Iterator<CardModel> it=models.iterator();it.hasNext();)
+    for(CardModel cardModel : models)
     {
-      cardModel=it.next();
       int nb=_model.getCardinality(cardModel);
       for(int i=0;i<nb;i++)
       {
@@ -124,12 +121,10 @@ public class Deck
   @Override
   public String toString()
   {
-    StringBuilder sb=new StringBuilder("Deck : ");
+    StringBuilder sb=new StringBuilder("Deck: ");
     sb.append(EndOfLine.NATIVE_EOL);
-    Card c;
-    for(Iterator<Card> i=_cards.iterator();i.hasNext();)
+    for(Card c : _cards)
     {
-      c=i.next();
       sb.append(c);
       sb.append(EndOfLine.NATIVE_EOL);
     }

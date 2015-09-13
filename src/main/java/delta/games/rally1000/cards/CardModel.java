@@ -37,7 +37,7 @@ public class CardModel
   /**
    * Car crash.
    */
-  public static final CardModel ACCIDENT=buildAttack(CardNames.ACCIDENT);
+  public static final CardModel CAR_CRASH=buildAttack(CardNames.CAR_CRASH);
   /**
    * Repair car.
    */
@@ -96,7 +96,7 @@ public class CardModel
 
   static
   {
-    associateCards(ACCIDENT,REPAIRS,DRIVING_ACE);
+    associateCards(CAR_CRASH,REPAIRS,DRIVING_ACE);
     associateCards(FLAT_TIRE,SPARE_TIRE,PUNCTURE_PROOF);
     associateCards(OUT_OF_GAS,GASOLINE,EXTRA_TANK);
     associateCards(RED_LIGHT,ROLL,RIGHT_OF_WAY);

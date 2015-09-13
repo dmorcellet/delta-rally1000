@@ -8,14 +8,17 @@ import delta.games.rally1000.cards.Card;
 import delta.games.rally1000.cards.CardFamily;
 import delta.games.rally1000.cards.CardModel;
 
+/**
+ * Cards setup for a team.
+ * @author DAM
+ */
 public class ExposedCards
 {
-  private Team _equipe;
-  private PilesManager _sabot;
+  private Team _team;
+  private PilesManager _deck;
   private ArrayList<Card> _speedLimitationStack;
   private ArrayList<Card> _attacksStack;
-  private List<Card> _exposedSafeties;
-  private List<Boolean> _coupFourres;
+  private List<ExposedSafetyCard> _exposedSafeties;
   private List<Card> _kilometersCards;
 
   private CardModel _repairNeeded;
@@ -23,47 +26,64 @@ public class ExposedCards
   private boolean _canRun;
   private boolean _speedLimited;
   private int _kilometers;
-  private int _distanceAParcourir;
+  private int _kilometersToRun;
 
   /**
    * Constructor.
    * @param parameters Game parameters.
    * @param team Associated team.
-   * @param sabot
+   * @param stacks Stacks manager.
    */
-  public ExposedCards(GameParameters parameters, Team team, PilesManager sabot)
+  public ExposedCards(GameParameters parameters, Team team, PilesManager stacks)
   {
-    _equipe=team;
-    _sabot=sabot;
+    _team=team;
+    _deck=stacks;
     _speedLimitationStack=new ArrayList<Card>();
     _attacksStack=new ArrayList<Card>();
-    _exposedSafeties=new ArrayList<Card>();
-    _coupFourres=new ArrayList<Boolean>();
+    _exposedSafeties=new ArrayList<ExposedSafetyCard>();
     _kilometersCards=new ArrayList<Card>();
     _repairNeeded=null;
     _greenLightNeeded=true;
     _canRun=false;
     _speedLimited=false;
     _kilometers=0;
-    _distanceAParcourir=parameters.getNbKilometers();
+    _kilometersToRun=parameters.getNbKilometers();
   }
 
+  /**
+   * Get the associated team.
+   * @return the associated team.
+   */
   public Team getTeam()
   {
-    return _equipe;
+    return _team;
   }
 
-  public boolean peutRouler()
+  /**
+   * Indicates if this team is allowed to run or not.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
+  public boolean canRun()
   {
     return _canRun;
   }
 
+  /**
+   * Indicates if this team is speed limited or not.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
   public boolean isSpeedLimited()
   {
     return _speedLimited;
   }
 
-  public boolean estPosableParAdversaire(Card card)
+  /**
+   * Indicates if the given card can be put on this setup
+   * by an opponent.
+   * @param card Card to test.
+   * @return <code>true</code> if it is, <code>false</code> otherwise.
+   */
+  public boolean canBePutByOpponent(Card card)
   {
     boolean ret=false;
     CardFamily cardFamily=card.getFamily();
@@ -93,7 +113,12 @@ public class ExposedCards
     return ret;
   }
 
-  public boolean canPut(Card card)
+  /**
+   * Indicates if a card can be put on this setup.
+   * @param card Card to test.
+   * @return <code>true</code> if it is possible, <code>false</code> otherwise.
+   */
+  public boolean canBePut(Card card)
   {
     boolean ret=false;
     CardModel cardModel=card.getModel();
@@ -105,7 +130,7 @@ public class ExposedCards
         int kms=cardModel.getKilometers();
         if ((!_speedLimited)||(kms<=50))
         {
-          if (_kilometers+kms<=_distanceAParcourir)
+          if (_kilometers+kms<=_kilometersToRun)
           {
             ret=true;
           }
@@ -152,6 +177,11 @@ public class ExposedCards
     return ret;
   }
 
+  /**
+   * Indicates if the given card has a chance to be usefull or not.
+   * @param card Card to test.
+   * @return <code>true</code> if it does, <code>false</code> otherwise.
+   */
   public boolean isUsefull(Card card)
   {
     boolean ret=true;
@@ -179,7 +209,7 @@ public class ExposedCards
     }
     else if (family==CardFamily.ATTACK)
     {
-      // todo handle the case where the other player has shown the matching safety
+      // todo handle the case where one other team has shown the matching safety
       ret=true;
     }
     return ret;
@@ -216,11 +246,16 @@ public class ExposedCards
       if ((lastCardOfAttackStack!=null) && (lastCardOfAttackStack.getFamily()==CardFamily.ATTACK))
       {
         _attacksStack.remove(lastCardOfAttackStack);
-        _sabot.discard(lastCardOfAttackStack);
+        _deck.discard(lastCardOfAttackStack);
       }
     }
   }
 
+  /**
+   * Put a card.
+   * @param card Card to put.
+   * @param coupFourre Indicates if this is a 'coup fourré'.
+   */
   public void putCard(Card card, boolean coupFourre)
   {
     CardFamily cardFamily=card.getFamily();
@@ -232,8 +267,8 @@ public class ExposedCards
     }
     else if (cardFamily==CardFamily.SAFETY)
     {
-      _exposedSafeties.add(card);
-      _coupFourres.add(Boolean.valueOf(coupFourre));
+      ExposedSafetyCard exposedSafety=new ExposedSafetyCard(card,coupFourre);
+      _exposedSafeties.add(exposedSafety);
 
       // todo Handle 'coup fourre'
 
@@ -245,7 +280,7 @@ public class ExposedCards
             && (cardModel==CardModel.RIGHT_OF_WAY))
         {
           _speedLimitationStack.remove(dernierePileLimitations);
-          _sabot.discard(dernierePileLimitations);
+          _deck.discard(dernierePileLimitations);
           _speedLimited=false;
         }
       }
@@ -288,47 +323,59 @@ public class ExposedCards
     canRunEvaluation();
   }
 
+  /**
+   * Get the last card of the attacks stack, if any.
+   * @return A card or <code>null</code>.
+   */
   public Card getLastCardOfAttackStack()
   {
-    Card retour=null;
+    Card ret=null;
     if (_attacksStack.size()>0)
     {
-      retour=_attacksStack.get(_attacksStack.size()-1);
+      ret=_attacksStack.get(_attacksStack.size()-1);
     }
-    return retour;
+    return ret;
   }
 
+  /**
+   * Get the last card of the speed limit stack, if any.
+   * @return A card or <code>null</code>.
+   */
   public Card getLastSpeedLimitCard()
   {
-    Card retour=null;
+    Card ret=null;
     if (_speedLimitationStack.size()>0)
     {
-      retour=_speedLimitationStack.get(_speedLimitationStack.size()-1);
+      ret=_speedLimitationStack.get(_speedLimitationStack.size()-1);
     }
-    return retour;
+    return ret;
   }
 
+  /**
+   * Get the total number of exposed kilometers.
+   * @return A number of kilometers.
+   */
   public int getKilometers()
   {
     return _kilometers;
   }
 
-  public Card[] getExposedSafeties()
+  /**
+   * Get the exposed safeties.
+   * @return A possibly empty array of safety cards.
+   */
+  public ExposedSafetyCard[] getExposedSafeties()
   {
     int size=_exposedSafeties.size();
-    Card[] ret=new Card[size];
+    ExposedSafetyCard[] ret=new ExposedSafetyCard[size];
     ret=_exposedSafeties.toArray(ret);
     return ret;
   }
 
-  public Boolean[] getCoupFourres()
-  {
-    int size=_coupFourres.size();
-    Boolean[] ret=new Boolean[size];
-    ret=_coupFourres.toArray(ret);
-    return ret;
-  }
-
+  /**
+   * Get an array of all exposed kilometers cards.
+   * @return a possibly empty array of kilometer cards.
+   */
   public Card[] getKilometersCards()
   {
     int size=_kilometersCards.size();
@@ -342,8 +389,9 @@ public class ExposedCards
     CardFamily family=safety.getFamily();
     assert family==CardFamily.SAFETY;
     boolean ret=false;
-    for(Card card : _exposedSafeties)
+    for(ExposedSafetyCard exposedSafety : _exposedSafeties)
     {
+      Card card=exposedSafety.getSafety();
       if (card.getModel()==safety)
       {
         ret=true;
@@ -353,6 +401,10 @@ public class ExposedCards
     return ret;
   }
 
+  /**
+   * Remove all cards.
+   * @return A list of all removed cards.
+   */
   public List<Card> removeAllCards()
   {
     List<Card> cards=new ArrayList<Card>();
@@ -360,7 +412,10 @@ public class ExposedCards
     _speedLimitationStack.clear();
     cards.addAll(_attacksStack);
     _attacksStack.clear();
-    cards.addAll(_exposedSafeties);
+    for(ExposedSafetyCard exposedSafety : _exposedSafeties)
+    {
+      cards.add(exposedSafety.getSafety());
+    }
     _exposedSafeties.clear();
     cards.addAll(_kilometersCards);
     _kilometersCards.clear();
@@ -405,10 +460,11 @@ public class ExposedCards
     int nbSafeties=_exposedSafeties.size();
     for(int i=0;i<nbSafeties;i++)
     {
-      Card card=_exposedSafeties.get(i);
-      CardModel model=card.getModel();
-      Boolean coupFourre=_coupFourres.get(i);
-      if (coupFourre.booleanValue())
+      ExposedSafetyCard exposedSafety=_exposedSafeties.get(i);
+      Card safety=exposedSafety.getSafety();
+      CardModel model=safety.getModel();
+      boolean coupFourre=exposedSafety.isCoupFourre();
+      if (coupFourre)
       {
         sb.append("Coup Fourré ");
       }

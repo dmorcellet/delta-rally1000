@@ -12,22 +12,37 @@ import delta.games.rally1000.gameplay.actions.DiscardAction;
 import delta.games.rally1000.gameplay.actions.PlayCardAction;
 
 /**
+ * Silicon player.
  * @author DAM
  */
 public class SiliconPlayer extends AbstractPlayerImpl
 {
+  /**
+   * Constructor.
+   * @param engine Game engine.
+   * @param player Player.
+   */
   public SiliconPlayer(GameEngine engine, Player player)
   {
     super(engine,player);
   }
 
+  /**
+   * Choose an action:
+   * <ul>
+   * <li>find a playable card.
+   * <li>if not found, choose a card to discard.
+   * </ul>
+   * When choosing a card to discard, it takes care
+   * not to choose a usefull card.
+   */
   @Override
   public AbstractAction chooseAction()
   {
     Game game=getGame();
     Player player=getPlayer();
     Team myTeam=player.getTeam();
-    PlayersHand playersHand=player.lireMain();
+    PlayersHand playersHand=player.getHand();
     ExposedCards myCards=myTeam.getExposedCards();
     for(int j=0;j<playersHand.getSize();j++)
     {

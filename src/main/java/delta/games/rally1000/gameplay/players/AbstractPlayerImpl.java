@@ -25,20 +25,36 @@ public abstract class AbstractPlayerImpl
     _player=player;
   }
 
+  /**
+   * Get the associated game engine.
+   * @return the game engine.
+   */
   public GameEngine getGameEngine()
   {
     return _engine;
   }
 
+  /**
+   * Get the associated game.
+   * @return the associated game.
+   */
   public Game getGame()
   {
     return _engine.getGame();
   }
 
+  /**
+   * Get the associated player.
+   * @return the associated player.
+   */
   public Player getPlayer()
   {
     return _player;
   }
 
+  /**
+   * Choose an action.
+   * @return an action.
+   */
   public abstract AbstractAction chooseAction();
 }

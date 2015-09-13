@@ -6,33 +6,56 @@ import java.util.List;
 import delta.common.utils.text.EndOfLine;
 import delta.games.rally1000.cards.Card;
 
+/**
+ * Hand of a player.
+ * @author DAM
+ */
 public class PlayersHand
 {
-  public static final int TAILLE_MAIN=7;
+  /**
+   * Number of cards in a player hand.
+   */
+  public static final int HAND_SIZE=7;
 
   private List<Card> _cards;
   private Player _player;
 
+  /**
+   * Constructor.
+   * @param player Associated player.
+   */
   public PlayersHand(Player player)
   {
-    _cards=new ArrayList<Card>(TAILLE_MAIN);
+    _cards=new ArrayList<Card>(HAND_SIZE);
     _player=player;
-    _player.fixerMain(this);
+    _player.setHand(this);
   }
 
+  /**
+   * Get the current number of cards in this hand.
+   * @return A number of cards.
+   */
   public int getSize()
   {
     return _cards.size();
   }
 
-  public void addCard(Card carte)
+  /**
+   * Add a card in this hand.
+   * @param card Card to add.
+   */
+  public void addCard(Card card)
   {
-    if (_cards.size()<TAILLE_MAIN)
+    if (_cards.size()<HAND_SIZE)
     {
-      _cards.add(carte);
+      _cards.add(card);
     }
   }
 
+  /**
+   * Remove all cards from this hand.
+   * @return A list of all removed cards.
+   */
   public List<Card> removeAllCards()
   {
     List<Card> ret=new ArrayList<Card>(_cards);
@@ -40,11 +63,20 @@ public class PlayersHand
     return ret;
   }
 
-  public void removeCard(Card carte)
+  /**
+   * Remove a card.
+   * @param card Card to remove.
+   */
+  public void removeCard(Card card)
   {
-    _cards.remove(carte);
+    _cards.remove(card);
   }
 
+  /**
+   * Get a card using its index.
+   * @param index An index, starting at 0.
+   * @return A card.
+   */
   public Card getCard(int index)
   {
     return _cards.get(index);
@@ -53,7 +85,7 @@ public class PlayersHand
   @Override
   public String toString()
   {
-    StringBuilder sb=new StringBuilder("Main :");
+    StringBuilder sb=new StringBuilder("Hand: ");
     sb.append(_player).append(EndOfLine.NATIVE_EOL);
     for(Card card : _cards)
     {

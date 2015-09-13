@@ -85,13 +85,12 @@ public class DefaultScoreComputer implements ScoreComputer
     // Computes safeties score
     int safetiesScore=0;
     {
-      Card[] safeties=shownCards.getExposedSafeties();
-      Boolean[] coupFourres=shownCards.getCoupFourres();
-      int nb=Math.min(safeties.length,coupFourres.length);
+      ExposedSafetyCard[] safeties=shownCards.getExposedSafeties();
+      int nb=safeties.length;
       for(int i=0;i<nb;i++)
       {
         safetiesScore+=SAFETY;
-        if (coupFourres[i].booleanValue())
+        if (safeties[i].isCoupFourre())
         {
           safetiesScore+=COUP_FOURRE_BONUS;
         }

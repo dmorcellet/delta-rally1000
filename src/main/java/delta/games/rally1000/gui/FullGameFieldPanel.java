@@ -9,13 +9,20 @@ import delta.games.rally1000.gameplay.Player;
 import delta.games.rally1000.gameplay.Team;
 
 /**
+ * Panel that displays all cards for all teams.
  * @author DAM
  */
 public class FullGameFieldPanel extends JPanel
 {
   private GameFieldPanel _mine;
+  // TODO manage more than 1 other team
   private GameFieldPanel _others;
 
+  /**
+   * Constructor.
+   * @param game Game to use.
+   * @param player Main player (whose view is displayed).
+   */
   public FullGameFieldPanel(Game game, Player player)
   {
     super(new BorderLayout());

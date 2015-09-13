@@ -65,6 +65,10 @@ public class DeckModel
     return 0;
   }
 
+  /**
+   * Get all card models.
+   * @return a list of card models.
+   */
   public List<CardModel> getCardModels()
   {
     List<CardModel> list=new ArrayList<CardModel>(_types);
@@ -78,7 +82,7 @@ public class DeckModel
     _cardinalities.put(CardModel.KM_75,Integer.valueOf(10));
     _cardinalities.put(CardModel.KM_100,Integer.valueOf(12));
     _cardinalities.put(CardModel.KM_200,Integer.valueOf(4));
-    _cardinalities.put(CardModel.ACCIDENT,Integer.valueOf(3));
+    _cardinalities.put(CardModel.CAR_CRASH,Integer.valueOf(3));
     _cardinalities.put(CardModel.FLAT_TIRE,Integer.valueOf(3));
     _cardinalities.put(CardModel.OUT_OF_GAS,Integer.valueOf(3));
     _cardinalities.put(CardModel.RED_LIGHT,Integer.valueOf(5));

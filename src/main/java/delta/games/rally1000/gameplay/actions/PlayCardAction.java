@@ -6,23 +6,40 @@ import delta.games.rally1000.gameplay.Game;
 import delta.games.rally1000.gameplay.Team;
 
 /**
+ * Play a card.
  * @author DAM
  */
 public class PlayCardAction extends AbstractAction
 {
   private Team _team;
 
+  /**
+   * Constructor.
+   * @param team Targeted team.
+   * @param card Card to play.
+   */
   public PlayCardAction(Team team, Card card)
   {
     super(card);
     _team=team;
   }
 
+  /**
+   * Get the targeted team.
+   * @return the targeted team.
+   */
   public Team getTeam()
   {
     return _team;
   }
 
+  /**
+   * Perform action:
+   * <ul>
+   * <li>grab card,
+   * <li>put it in the cards of the targeted team.
+   * </ul>
+   */
   @Override
   public void doIt(Game game)
   {
@@ -31,7 +48,7 @@ public class PlayCardAction extends AbstractAction
     //System.out.println("Carte jouée :"+card+" sur jeu "+shownCards);
     shownCards.putCard(card, false);
   }
-  
+
   @Override
   public String toString()
   {

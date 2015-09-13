@@ -5,15 +5,27 @@ import delta.games.rally1000.gameplay.Game;
 import delta.games.rally1000.gameplay.PilesManager;
 
 /**
+ * Discard a card.
  * @author DAM
  */
 public class DiscardAction extends AbstractAction
 {
+  /**
+   * Constructor.
+   * @param card Card to discard.
+   */
   public DiscardAction(Card card)
   {
     super(card);
   }
 
+  /**
+   * Perform action:
+   * <ul>
+   * <li>grab card,
+   * <li>put it in the stack of discarded cards.
+   * </ul>
+   */
   @Override
   public void doIt(Game game)
   {

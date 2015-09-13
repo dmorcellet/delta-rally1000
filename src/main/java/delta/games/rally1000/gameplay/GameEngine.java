@@ -14,6 +14,8 @@ import delta.games.rally1000.gameplay.players.HumanPlayer;
 import delta.games.rally1000.gameplay.players.SiliconPlayer;
 
 /**
+ * Game engine.
+ * Synchronizes actions of all players.
  * @author DAM
  */
 public class GameEngine
@@ -24,29 +26,42 @@ public class GameEngine
   private Player _currentPlayer;
   private AbstractAction _currentAction;
 
+  /**
+   * Get the sole instance of this class.
+   * @return the sole instance of this class.
+   */
   public static GameEngine getInstance()
   {
     return _instance;
   }
 
+  /**
+   * Constructor.
+   * @param game Game description (teams, players, deck...).
+   */
   public GameEngine(Game game)
   {
     _game=game;
+    // TODO beurk
     _instance=this;
   }
 
+  /**
+   * Get the associated game.
+   * @return the associated game.
+   */
   public Game getGame()
   {
     return _game;
   }
 
-  private void initPlayers(List<Player> players)
+  private void initPlayers(Player[] players)
   {
-    int nbPlayers=players.size();
+    int nbPlayers=players.length;
     _playerImpl=new ArrayList<AbstractPlayerImpl>(nbPlayers);
     for(int i=0;i<nbPlayers;i++)
     {
-      Player player=players.get(i);
+      Player player=players[i];
       AbstractPlayerImpl playerImpl=null;
       if (i==0)
       {
@@ -60,6 +75,15 @@ public class GameEngine
     }
   }
 
+  /**
+   * Play a game:
+   * <ul>
+   * <li>initialize players.
+   * <li>let each player play at his turn.
+   * <li>until players cannot play anymore, or
+   * <lI>until a team wins.
+   * </ul>
+   */
   public void play()
   {
     initPlayers(_game.getPlayers());
@@ -69,6 +93,7 @@ public class GameEngine
       {
         public void run()
         {
+          // TODO beurk
           Rally1000Main._fp.repaint();
         }
       };
@@ -108,10 +133,16 @@ public class GameEngine
       {
         break;
       }
+      // TODO manage the case where a team wins the game
     }
     _game.returnCardsToDeck();
   }
 
+  /**
+   * Post a player action.
+   * @param player Involved player.
+   * @param action Action to do.
+   */
   public void postPlayerAction(Player player, AbstractAction action)
   {
     if (player==_currentPlayer)
@@ -124,6 +155,10 @@ public class GameEngine
     }
   }
 
+  /**
+   * Wait for a player to choose an action.
+   * @return An action.
+   */
   public synchronized AbstractAction waitForPlayerAction()
   {
     Tools.startWaiting(this);

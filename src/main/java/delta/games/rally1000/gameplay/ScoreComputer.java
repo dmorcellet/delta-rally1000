@@ -8,9 +8,9 @@ public interface ScoreComputer
 {
   /**
    * Compute the score of a team in a single game.
-   * @param manche Game information.
+   * @param game Game information.
    * @param team Team to evaluate.
    * @return A score.
    */
-  public int getScore(Game manche, Team team);
+  int getScore(Game game, Team team);
 }

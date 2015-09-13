@@ -12,8 +12,16 @@ import delta.games.rally1000.gameplay.Player;
 import delta.games.rally1000.gameplay.Team;
 import delta.games.rally1000.gui.MainFrame;
 
+/**
+ * Main class for Rally 1000.
+ * @author DAM
+ */
 public class Rally1000Main
 {
+  /**
+   * Main frame.
+   */
+  // TODO beurk
   public static MainFrame _fp=null;
 
   static void buildUI(Game game)
@@ -22,12 +30,16 @@ public class Rally1000Main
     _fp.setVisible(true);
   }
 
+  /**
+   * Main method for Rally 1000.
+   * @param args Not used.
+   */
   public static void main(String[] args)
   {
-    System.out.println("Hello World !");
-
     DeckModel deckModel=new DeckModel();
     Deck deck=new Deck(deckModel);
+    // TODO configurable teams/players
+    // TODO networked game
     List<Team> teams=new ArrayList<Team>();
     Team team1=new Team("Eq1");
     teams.add(team1);
@@ -35,6 +47,7 @@ public class Rally1000Main
     teams.add(team2);
     List<Player> players=new ArrayList<Player>();
     Player player1=new Player("Joueur1");
+    // TODO use team1.addPlayer(player1)
     player1.setTeam(team1);
     players.add(player1);
     Player player2=new Player("Joueur2");

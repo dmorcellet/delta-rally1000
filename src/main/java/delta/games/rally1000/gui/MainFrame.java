@@ -12,10 +12,19 @@ import javax.swing.KeyStroke;
 import delta.games.rally1000.gameplay.Game;
 import delta.games.rally1000.gameplay.Player;
 
+/**
+ * Main frame for the Rally 100 application.
+ * @author DAM
+ */
 public class MainFrame extends JFrame
 {
   private Game _game;
 
+  /**
+   * Constructor.
+   * @param title Window title.
+   * @param game Game to use.
+   */
   public MainFrame(String title, Game game)
   {
     super(title);
@@ -38,23 +47,21 @@ public class MainFrame extends JFrame
     JMenuBar menuBar=new JMenuBar();
     setJMenuBar(menuBar);
 
-    // Menu partie
-    JMenu partie=new JMenu("Partie");
-    partie.setMnemonic(KeyEvent.VK_P);
-    partie.getAccessibleContext().setAccessibleDescription("toto");
-    menuBar.add(partie);
+    // Game menu
+    JMenu gameMenu=new JMenu("Game");
+    gameMenu.setMnemonic(KeyEvent.VK_P);
+    menuBar.add(gameMenu);
 
-    // Items de menu
-    JMenuItem nouvelle=new JMenuItem("Nouvelle...", KeyEvent.VK_N);
-    nouvelle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
-    nouvelle.getAccessibleContext().setAccessibleDescription("Nouvelle partie");
-    partie.add(nouvelle);
+    // New game...
+    JMenuItem newMenuItem=new JMenuItem("New...", KeyEvent.VK_N);
+    newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
+    gameMenu.add(newMenuItem);
 
-    partie.addSeparator();
+    gameMenu.addSeparator();
 
-    JMenuItem quitter=new JMenuItem("Quitter !", KeyEvent.VK_Q);
-    quitter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.ALT_MASK));
-    quitter.getAccessibleContext().setAccessibleDescription("Quitter");
-    partie.add(quitter);
+    // Quit
+    JMenuItem quitMenuItem=new JMenuItem("Quit", KeyEvent.VK_Q);
+    quitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.ALT_MASK));
+    gameMenu.add(quitMenuItem);
   }
 }

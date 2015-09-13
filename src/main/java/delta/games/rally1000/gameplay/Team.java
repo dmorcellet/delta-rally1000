@@ -6,7 +6,7 @@ package delta.games.rally1000.gameplay;
  */
 public class Team
 {
-  private static final int MAX_JOUEURS_DANS_EQUIPE=2;
+  private static final int MAX_PLAYERS_IN_A_TEAM=2;
   private String _name;
   private Player[] _players;
   private int _nbPlayers;
@@ -19,8 +19,8 @@ public class Team
   public Team(String name)
   {
     _name=name;
-    _players=new Player[MAX_JOUEURS_DANS_EQUIPE];
-    for(int i=0;i<MAX_JOUEURS_DANS_EQUIPE;i++)
+    _players=new Player[MAX_PLAYERS_IN_A_TEAM];
+    for(int i=0;i<MAX_PLAYERS_IN_A_TEAM;i++)
     {
       _players[i]=null;
     }
@@ -28,21 +28,33 @@ public class Team
     _exposedCards=null;
   }
 
-  public void addPlayer(Player joueur)
+  /**
+   * Add a player in this team.
+   * @param player Player to add.
+   */
+  public void addPlayer(Player player)
   {
-    if(_nbPlayers<MAX_JOUEURS_DANS_EQUIPE)
+    if(_nbPlayers<MAX_PLAYERS_IN_A_TEAM)
     {
-      _players[_nbPlayers]=joueur;
-      joueur.setTeam(this);
+      _players[_nbPlayers]=player;
+      player.setTeam(this);
       _nbPlayers++;
     }
   }
 
-  public void fixerJeu(ExposedCards exposedCards)
+  /**
+   * Set the cards setup for this team.
+   * @param exposedCards Setup to associate to this team.
+   */
+  public void setCards(ExposedCards exposedCards)
   {
     _exposedCards=exposedCards;
   }
 
+  /**
+   * Get the cards setup for this team.
+   * @return the cards setup for this team.
+   */
   public ExposedCards getExposedCards()
   {
     return _exposedCards;
@@ -51,6 +63,6 @@ public class Team
   @Override
   public String toString()
   {
-    return "Equipe ["+_name+"]";
+    return "Team ["+_name+"]";
   }
 }

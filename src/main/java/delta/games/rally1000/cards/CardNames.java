@@ -1,31 +1,89 @@
 package delta.games.rally1000.cards;
 
 /**
+ * Card names.
  * @author DAM
  */
 public class CardNames
 {
+  /**
+   * 25 kilometers.
+   */
   public static final String KM_25="25KM";
+  /**
+   * 50 kilometers.
+   */
   public static final String KM_50="50KM";
+  /**
+   * 75 kilometers.
+   */
   public static final String KM_75="75KM";
+  /**
+   * 100 kilometers.
+   */
   public static final String KM_100="100KM";
+  /**
+   * 200 kilometers.
+   */
   public static final String KM_200="200KM";
 
-  public static final String ACCIDENT="ACCIDENT";
-  public static final String REPAIRS="REPARATION";
-  public static final String DRIVING_ACE="AS DU VOLANT";
+  /**
+   * Car crash.
+   */
+  public static final String CAR_CRASH="CAR_CRASH";
+  /**
+   * Repairs.
+   */
+  public static final String REPAIRS="REPAIRS";
+  /**
+   * Driving ace.
+   */
+  public static final String DRIVING_ACE="DRIVING_ACE";
 
-  public static final String FLAT_TIRE="CREVAISON";
-  public static final String SPARE_TIRE="ROUE DE SECOURS";
-  public static final String PUNCTURE_PROOF="INCREVABLE";
+  /**
+   * Flat tire.
+   */
+  public static final String FLAT_TIRE="FLAT_TIRE";
+  /**
+   * Spare tire.
+   */
+  public static final String SPARE_TIRE="SPARE_TIRE";
+  /**
+   * Puncture proof.
+   */
+  public static final String PUNCTURE_PROOF="PUNCTURE_PROOF";
 
-  public static final String OUT_OF_GAS="PANNE D'ESSENCE";
-  public static final String GAS_CAN="ESSENCE";
-  public static final String EXTRA_TANK="CITERNE";
+  /**
+   * Out of gas.
+   */
+  public static final String OUT_OF_GAS="OUT_OF_GAS";
+  /**
+   * Gas can.
+   */
+  public static final String GAS_CAN="GAS_CAN";
+  /**
+   * Extra tank.
+   */
+  public static final String EXTRA_TANK="EXTRA_TANK";
 
-  public static final String RED_LIGHT="FEU ROUGE";
-  public static final String SPEED_LIMIT="LIMITATION DE VITESSE";
-  public static final String GREEN_LIGHT="FEU VERT";
-  public static final String END_OF_SPEED_LIMIT="FIN DE LIMITATION DE VITESSE";
-  public static final String RIGHT_OF_WAY="VEHICULE PRIORITAIRE";
+  /**
+   * Red light.
+   */
+  public static final String RED_LIGHT="RED_LIGHT";
+  /**
+   * Speed limit.
+   */
+  public static final String SPEED_LIMIT="SPEED_LIMIT";
+  /**
+   * Green light.
+   */
+  public static final String GREEN_LIGHT="GREEN_LIGHT";
+  /**
+   * End of speed limit.
+   */
+  public static final String END_OF_SPEED_LIMIT="END_OF_SPEED_LIMIT";
+  /**
+   * Right of way.
+   */
+  public static final String RIGHT_OF_WAY="RIGHT_OF_WAY";
 }

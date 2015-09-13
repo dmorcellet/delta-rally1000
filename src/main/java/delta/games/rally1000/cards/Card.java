@@ -42,7 +42,7 @@ public class Card
   @Override
   public String toString()
   {
-    String s="Card : "+_model.getName();
+    String s="Card: "+_model.getName();
     return s;
   }
 }

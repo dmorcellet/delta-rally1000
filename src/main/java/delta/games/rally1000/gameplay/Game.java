@@ -7,6 +7,10 @@ import delta.games.rally1000.cards.Card;
 import delta.games.rally1000.cards.Deck;
 import delta.games.rally1000.gameplay.actions.PlayCardAction;
 
+/**
+ * Gather data about a game session.
+ * @author DAM
+ */
 public class Game
 {
   private GameParameters _parameters;
@@ -37,6 +41,15 @@ public class Game
     _scoreComputer=new DefaultScoreComputer();
   }
 
+  /**
+   * Start game:
+   * <ul>
+   * <li>shuffle and cut deck,
+   * <li>setup exposed cards for each team,
+   * <li>setup players hands,
+   * <li>distribute cards.
+   * </ul>
+   */
   public void start()
   {
     _deck.shuffle();
@@ -44,7 +57,7 @@ public class Game
     for(int i=0;i<_teams.size();i++)
     {
       _shownCards[i]=new ExposedCards(_parameters, _teams.get(i), _pilesManager);
-      _teams.get(i).fixerJeu(_shownCards[i]);
+      _teams.get(i).setCards(_shownCards[i]);
     }
     for(int i=0;i<_players.size();i++)
     {
@@ -54,7 +67,10 @@ public class Game
     distribute();
   }
 
-  public void distribute()
+  /**
+   * Distribute cards to all players.
+   */
+  private void distribute()
   {
     int nbCards=_parameters.getNumberOfCardsAtStartup();
     for(int i=0;i<nbCards;i++)
@@ -65,28 +81,27 @@ public class Game
         _hands[j].addCard(carte);
       }
     }
-    /*
-    for(int i=0;i<_players.size();i++)
-    {
-      System.out.println(_hands[i]);
-    }
-    */
   }
 
+  /**
+   * Build a 'play card' action.
+   * @param sourceTeam Team that plays the card.
+   * @param card Card to play.
+   * @return An action or <code>null</code> if it is not possible.
+   */
   public PlayCardAction buildAction(Team sourceTeam, Card card)
   {
     ExposedCards myCards=sourceTeam.getExposedCards();
-    if (myCards.canPut(card))
+    if (myCards.canBePut(card))
     {
       return new PlayCardAction(sourceTeam,card);
     }
     for(Team team : _teams)
     {
-      ExposedCards otherTeamShownCards;
       if (team!=sourceTeam)
       {
-        otherTeamShownCards=team.getExposedCards();
-        if (otherTeamShownCards.estPosableParAdversaire(card))
+        ExposedCards otherTeamShownCards=team.getExposedCards();
+        if (otherTeamShownCards.canBePutByOpponent(card))
         {
           return new PlayCardAction(team,card);
         }
@@ -95,11 +110,14 @@ public class Game
     return null;
   }
 
+  /**
+   * Return all cards to the main deck.
+   */
   public void returnCardsToDeck()
   {
-    // Retrieve cards from piles
-    List<Card> pilesCards=_pilesManager.removeAllCards();
-    _deck.putCards(pilesCards);
+    // Retrieve cards from stacks
+    List<Card> stackedCards=_pilesManager.removeAllCards();
+    _deck.putCards(stackedCards);
     // Retrieve cards from teams
     for(Team team : _teams)
     {
@@ -110,17 +128,26 @@ public class Game
     // Retrieve cards from players
     for(Player player : _players)
     {
-      PlayersHand hand=player.lireMain();
+      PlayersHand hand=player.getHand();
       List<Card> cardsForPlayer=hand.removeAllCards();
       _deck.putCards(cardsForPlayer);
     }
   }
 
+  /**
+   * Get game parameters.
+   * @return the current game parameters.
+   */
   public GameParameters getParameters()
   {
     return _parameters;
   }
 
+  /**
+   * Get the exposed cards for a team.
+   * @param team Targeted team.
+   * @return a set of exposed cards or <code>null</code>.
+   */
   public ExposedCards getShownCards(Team team)
   {
     ExposedCards ret=null;
@@ -132,16 +159,28 @@ public class Game
     return ret;
   }
 
+  /**
+   * Get the deck used for this game.
+   * @return A deck.
+   */
   public Deck getDeck()
   {
     return _deck;
   }
 
+  /**
+   * Get the stacks manager.
+   * @return the stacks manager.
+   */
   public PilesManager getPilesManager()
   {
     return _pilesManager;
   }
 
+  /**
+   * Get an array of all teams.
+   * @return An array of teams.
+   */
   public Team[] getTeams()
   {
     int nbTeams=_teams.size();
@@ -150,36 +189,42 @@ public class Game
     return ret;
   }
 
+  /**
+   * Get an array of all teams opposed to the given one.
+   * @param team Team to use.
+   * @return An array of teams.
+   */
   public Team[] getOtherTeams(Team team)
   {
-    List<Team> teamsList=new ArrayList<Team>();
-    {
-      int nbTeams=_teams.size();
-      for(int i=0;i<nbTeams;i++)
-      {
-        Team aTeam=_teams.get(i);
-        if (aTeam!=team)
-        {
-          teamsList.add(aTeam);
-        }
-      }
-    }
-    int nbTeams=teamsList.size();
-    Team[] ret=new Team[nbTeams];
-    ret=teamsList.toArray(ret);
-    return ret;
+    List<Team> teamsList=new ArrayList<Team>(_teams);
+    teamsList.remove(team);
+    return teamsList.toArray(new Team[teamsList.size()]);
   }
 
-  public List<Player> getPlayers()
+  /**
+   * Get an array of all players.
+   * @return An array of players.
+   */
+  public Player[] getPlayers()
   {
-    return _players;
+    return _players.toArray(new Player[_players.size()]);
   }
 
+  /**
+   * Get a player using its index.
+   * @param index An index, starting at 0.
+   * @return A player.
+   */
   public Player getPlayer(int index)
   {
     return _players.get(index);
   }
 
+  /**
+   * Get a player hand using its index.
+   * @param index An index, starting at 0.
+   * @return A player hand.
+   */
   public PlayersHand getHand(int index)
   {
     return _hands[index];
@@ -215,7 +260,7 @@ public class Game
   @Override
   public String toString()
   {
-    String s_l="Manche :\n";
+    String s_l="Game:\n";
     for(int i=0;i<_players.size();i++)
     {
       s_l=s_l+_hands[i];
