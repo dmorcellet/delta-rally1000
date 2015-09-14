@@ -26,7 +26,8 @@ public class FullGameFieldPanel extends JPanel
   public FullGameFieldPanel(Game game, Player player)
   {
     super(new BorderLayout());
-    _mine=new GameFieldPanel(game,player);
+    ImagesManager imagesMgr=new ImagesManager();
+    _mine=new GameFieldPanel(game,player,imagesMgr);
     Team myTeam=player.getTeam();
     Team[] teams=game.getTeams();
     Team otherTeam=null;
@@ -38,7 +39,7 @@ public class FullGameFieldPanel extends JPanel
         break;
       }
     }
-    _others=new GameFieldPanel(game,otherTeam);
+    _others=new GameFieldPanel(game,otherTeam,imagesMgr);
     add(_mine,BorderLayout.SOUTH);
     add(_others,BorderLayout.NORTH);
   }

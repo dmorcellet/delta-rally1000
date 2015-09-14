@@ -79,13 +79,14 @@ public class GameFieldPanel extends JPanel
    * Constructor.
    * @param game Associated game.
    * @param team Associated team.
+   * @param imagesMgr Images manager.
    */
-  public GameFieldPanel(Game game, Team team)
+  public GameFieldPanel(Game game, Team team, ImagesManager imagesMgr)
   {
     super();
     _playersHand=null;
     _showHand=false;
-    _imagesMgr=new ImagesManager();
+    _imagesMgr=imagesMgr;
     init(game,team);
   }
 
@@ -93,13 +94,15 @@ public class GameFieldPanel extends JPanel
    * Constructor.
    * @param game Associated game.
    * @param player Associated player.
+   * @param imagesMgr Images manager.
    */
-  public GameFieldPanel(Game game, Player player)
+  public GameFieldPanel(Game game, Player player, ImagesManager imagesMgr)
   {
     super();
     _player=player;
     _playersHand=player.getHand();
     _showHand=true;
+    _imagesMgr=imagesMgr;
     init(game,player.getTeam());
   }
 
