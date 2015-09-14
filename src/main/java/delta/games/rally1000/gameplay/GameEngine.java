@@ -97,6 +97,7 @@ public class GameEngine
           Rally1000Main._fp.repaint();
         }
       };
+      PilesManager pilesManager=_game.getPilesManager();
       int nbPlayers=_playerImpl.size();
       int nbJoueursImpotents=0;
       for(int i=0;i<nbPlayers;i++)
@@ -104,20 +105,13 @@ public class GameEngine
         AbstractPlayerImpl playerImpl=_playerImpl.get(i);
         _currentPlayer=playerImpl.getPlayer();
         PlayersHand playersHand=_game.getHand(i);
-        PilesManager pilesManager=_game.getPilesManager();
-
         Card drawnCard=pilesManager.drawCard();
-        if(drawnCard!=null)
+        int nbCardsLeft=pilesManager.getNbAvailableCards();
+        System.out.println("Nb cards left: "+nbCardsLeft);
+        if (drawnCard!=null)
         {
           playersHand.addCard(drawnCard);
           SwingUtilities.invokeLater(r);
-          /*
-          System.out.println(playersHand);
-          for(int j=0;j<_teams.size();j++)
-          {
-            System.out.println(j+" : "+_shownCards[j]);
-          }
-          */
           AbstractAction action=playerImpl.chooseAction();
           action.doIt(_game);
           Card card=action.getCard();
@@ -131,9 +125,27 @@ public class GameEngine
       }
       if (nbJoueursImpotents==nbPlayers)
       {
+        System.out.println("Players can't play anymore!");
         break;
       }
-      // TODO manage the case where a team wins the game
+      Team[] teams=_game.getTeams();
+      Team winningTeam=null;
+      for(Team team : teams)
+      {
+        ExposedCards cards=_game.getShownCards(team);
+        boolean finished=cards.hasFinished();
+        if (finished)
+        {
+          winningTeam=team;
+          break;
+        }
+      }
+      if (winningTeam!=null)
+      {
+        // TODO display winner message
+        System.out.println("team "+winningTeam.getName()+" has won!");
+        break;
+      }
     }
     _game.returnCardsToDeck();
   }

@@ -29,6 +29,15 @@ public class Team
   }
 
   /**
+   * Get the team name.
+   * @return the team name.
+   */
+  public String getName()
+  {
+    return _name;
+  }
+
+  /**
    * Add a player in this team.
    * @param player Player to add.
    */

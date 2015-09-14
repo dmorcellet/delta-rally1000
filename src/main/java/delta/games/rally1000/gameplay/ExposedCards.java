@@ -402,6 +402,15 @@ public class ExposedCards
   }
 
   /**
+   * Indicates if this team has finished his run.
+   * @return <code>true</code> if it has, <code>false</code> otherwise...
+   */
+  public boolean hasFinished()
+  {
+    return _kilometers==_kilometersToRun;
+  }
+
+  /**
    * Remove all cards.
    * @return A list of all removed cards.
    */
