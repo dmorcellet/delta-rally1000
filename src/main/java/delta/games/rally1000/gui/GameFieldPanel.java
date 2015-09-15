@@ -76,7 +76,7 @@ public class GameFieldPanel extends JPanel
   private ImagesManager _imagesMgr;
 
   /**
-   * Constructor.
+   * Constructor (opponent team view).
    * @param game Associated game.
    * @param team Associated team.
    * @param imagesMgr Images manager.
@@ -91,7 +91,7 @@ public class GameFieldPanel extends JPanel
   }
 
   /**
-   * Constructor.
+   * Constructor (main player view).
    * @param game Associated game.
    * @param player Associated player.
    * @param imagesMgr Images manager.
@@ -257,7 +257,6 @@ public class GameFieldPanel extends JPanel
         if ((button==MouseEvent.BUTTON1) || (button==MouseEvent.BUTTON3))
         {
           Point p=e.getPoint();
-
           int nbCards=_playersHand.getSize();
           for(int i=0;i<nbCards;i++)
           {
@@ -268,7 +267,6 @@ public class GameFieldPanel extends JPanel
 
             if ((p.x>=minX) && (p.x<=maxX) && (p.y>=minY) && (p.y<=maxY))
             {
-
               Card card=_playersHand.getCard(i);
               AbstractAction action=null;
               if (button==MouseEvent.BUTTON1)
