@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import delta.games.rally1000.gameplay.Game;
@@ -38,8 +39,9 @@ public class MainFrame extends JFrame
   private void buildGamePanel()
   {
     Player player=_game.getPlayer(0);
-    FullGameFieldPanel terrain=new FullGameFieldPanel(_game, player);
-    getContentPane().add(terrain);
+    FullGameFieldPanelController terrain=new FullGameFieldPanelController(_game, player);
+    JPanel mainPanel=terrain.getPanel();
+    getContentPane().add(mainPanel);
   }
 
   private void buildMenuBar()

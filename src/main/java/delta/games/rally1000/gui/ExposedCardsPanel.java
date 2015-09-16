@@ -4,9 +4,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
@@ -15,18 +12,15 @@ import delta.games.rally1000.cards.CardModel;
 import delta.games.rally1000.gameplay.ExposedCards;
 import delta.games.rally1000.gameplay.ExposedSafetyCard;
 import delta.games.rally1000.gameplay.Game;
-import delta.games.rally1000.gameplay.GameEngine;
 import delta.games.rally1000.gameplay.Player;
 import delta.games.rally1000.gameplay.PlayersHand;
 import delta.games.rally1000.gameplay.Team;
-import delta.games.rally1000.gameplay.actions.AbstractAction;
-import delta.games.rally1000.gameplay.actions.DiscardAction;
 
 /**
  * Panel that displays all cards for a single team.
  * @author DAM
  */
-public class GameFieldPanel extends JPanel
+public class ExposedCardsPanel extends JPanel
 {
   private static final int TOP_MARGIN=10;
   private static final int BOTTOM_MARGIN=10;
@@ -69,7 +63,6 @@ public class GameFieldPanel extends JPanel
 
   private Game _game;
   private Team _team;
-  private Player _player;
   private ExposedCards _shownCards;
   private PlayersHand _playersHand;
   private boolean _showHand;
@@ -81,7 +74,7 @@ public class GameFieldPanel extends JPanel
    * @param team Associated team.
    * @param imagesMgr Images manager.
    */
-  public GameFieldPanel(Game game, Team team, ImagesManager imagesMgr)
+  public ExposedCardsPanel(Game game, Team team, ImagesManager imagesMgr)
   {
     super();
     _playersHand=null;
@@ -96,10 +89,9 @@ public class GameFieldPanel extends JPanel
    * @param player Associated player.
    * @param imagesMgr Images manager.
    */
-  public GameFieldPanel(Game game, Player player, ImagesManager imagesMgr)
+  public ExposedCardsPanel(Game game, Player player, ImagesManager imagesMgr)
   {
     super();
-    _player=player;
     _playersHand=player.getHand();
     _showHand=true;
     _imagesMgr=imagesMgr;
@@ -113,10 +105,7 @@ public class GameFieldPanel extends JPanel
     _shownCards=team.getExposedCards();
     Dimension d=computeSize();
     setPreferredSize(d);
-    if (_playersHand!=null)
-    {
-      addMouseListener();
-    }
+    setSize(d);
   }
 
   private Dimension computeSize()
@@ -151,8 +140,7 @@ public class GameFieldPanel extends JPanel
   @Override
   public void paintComponent(Graphics g)
   {
-    super.paintComponent(g); //paint background
-
+    super.paintComponent(g);
     // Draw safeties
     {
       int x=X_SAFETIES;
@@ -237,52 +225,27 @@ public class GameFieldPanel extends JPanel
     }
   }
 
-  private void postAction(AbstractAction action)
+  /**
+   * Get the card under the given point.
+   * @param p Point to use.
+   * @return A card or <code>null</code>.
+   */
+  public Card getCardAt(Point p)
   {
-    if (action!=null)
+    int nbCards=_playersHand.getSize();
+    for(int i=0;i<nbCards;i++)
     {
-      System.out.println("Selected action: "+action);
-      GameEngine.getInstance().postPlayerAction(_player,action);
-    }
-  }
+      int minX=X_PLAYERS_HAND+i*(CARD_WIDTH+SPACE_BETWEEN_STACKS);
+      int minY=Y_PLAYERS_HAND;
+      int maxX=minX+CARD_WIDTH;
+      int maxY=Y_PLAYERS_HAND+CARD_HEIGHT;
 
-  private void addMouseListener()
-  {
-    MouseListener listener=new MouseAdapter()
-    {
-      @Override
-      public void mouseClicked(MouseEvent e)
+      if ((p.x>=minX) && (p.x<=maxX) && (p.y>=minY) && (p.y<=maxY))
       {
-        int button=e.getButton();
-        if ((button==MouseEvent.BUTTON1) || (button==MouseEvent.BUTTON3))
-        {
-          Point p=e.getPoint();
-          int nbCards=_playersHand.getSize();
-          for(int i=0;i<nbCards;i++)
-          {
-            int minX=X_PLAYERS_HAND+i*(CARD_WIDTH+SPACE_BETWEEN_STACKS);
-            int minY=Y_PLAYERS_HAND;
-            int maxX=minX+CARD_WIDTH;
-            int maxY=Y_PLAYERS_HAND+CARD_HEIGHT;
-
-            if ((p.x>=minX) && (p.x<=maxX) && (p.y>=minY) && (p.y<=maxY))
-            {
-              Card card=_playersHand.getCard(i);
-              AbstractAction action=null;
-              if (button==MouseEvent.BUTTON1)
-              {
-                action=_game.buildAction(_team,card);
-              }
-              else
-              {
-                action=new DiscardAction(card);
-              }
-              postAction(action);
-            }
-          }
-        }
+        Card card=_playersHand.getCard(i);
+        return card;
       }
-    };
-    addMouseListener(listener);
+    }
+    return null;
   }
 }
