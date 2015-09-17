@@ -84,7 +84,7 @@ public class CardModel
   /**
    * Green light.
    */
-  public static final CardModel ROLL=buildParade(CardNames.GREEN_LIGHT);
+  public static final CardModel GREEN_LIGHT=buildParade(CardNames.GREEN_LIGHT);
   /**
    * End of speed limitation.
    */
@@ -99,7 +99,7 @@ public class CardModel
     associateCards(CAR_CRASH,REPAIRS,DRIVING_ACE);
     associateCards(FLAT_TIRE,SPARE_TIRE,PUNCTURE_PROOF);
     associateCards(OUT_OF_GAS,GASOLINE,EXTRA_TANK);
-    associateCards(RED_LIGHT,ROLL,RIGHT_OF_WAY);
+    associateCards(RED_LIGHT,GREEN_LIGHT,RIGHT_OF_WAY);
     associateCards(SPEED_LIMIT,END_OF_SPEED_LIMIT,RIGHT_OF_WAY);
   }
 

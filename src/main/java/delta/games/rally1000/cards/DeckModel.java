@@ -90,7 +90,7 @@ public class DeckModel
     _cardinalities.put(CardModel.REPAIRS,Integer.valueOf(6));
     _cardinalities.put(CardModel.SPARE_TIRE,Integer.valueOf(6));
     _cardinalities.put(CardModel.GASOLINE,Integer.valueOf(6));
-    _cardinalities.put(CardModel.ROLL,Integer.valueOf(14));
+    _cardinalities.put(CardModel.GREEN_LIGHT,Integer.valueOf(14));
     _cardinalities.put(CardModel.END_OF_SPEED_LIMIT,Integer.valueOf(6));
     _cardinalities.put(CardModel.DRIVING_ACE,Integer.valueOf(1));
     _cardinalities.put(CardModel.PUNCTURE_PROOF,Integer.valueOf(1));

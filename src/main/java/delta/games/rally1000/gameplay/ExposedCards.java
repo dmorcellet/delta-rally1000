@@ -165,7 +165,7 @@ public class ExposedCards
           }
           else
           {
-            if ((_greenLightNeeded) && (cardModel==CardModel.ROLL))
+            if ((_greenLightNeeded) && (cardModel==CardModel.GREEN_LIGHT))
             {
               ret=true;
             }
@@ -310,7 +310,7 @@ public class ExposedCards
       {
         _attacksStack.add(card);
         _repairNeeded=null;
-        if (cardModel==CardModel.ROLL)
+        if (cardModel==CardModel.GREEN_LIGHT)
         {
           _greenLightNeeded=false;
         }
