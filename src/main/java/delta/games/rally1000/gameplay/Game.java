@@ -260,11 +260,11 @@ public class Game
   @Override
   public String toString()
   {
-    String s_l="Game:\n";
+    String s="Game:\n";
     for(int i=0;i<_players.size();i++)
     {
-      s_l=s_l+_hands[i];
+      s=s+_hands[i];
     }
-    return s_l;
+    return s;
   }
 }
