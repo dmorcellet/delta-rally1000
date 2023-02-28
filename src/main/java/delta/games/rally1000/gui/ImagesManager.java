@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 
 import delta.games.rally1000.cards.CardNames;
-import delta.games.rally1000.utils.Rally1000Loggers;
 
 /**
  * Manages all icons/images.
@@ -18,7 +17,7 @@ import delta.games.rally1000.utils.Rally1000Loggers;
  */
 public class ImagesManager
 {
-  private static final Logger _logger=Rally1000Loggers.getRally1000Logger();
+  private static final Logger LOGGER=Logger.getLogger(ImagesManager.class);
 
   private static final String CARDS_IMAGES_PACKAGE="delta/games/rally1000/resources/images/cards";
 
@@ -79,7 +78,7 @@ public class ImagesManager
     }
     catch(IOException ioe)
     {
-      _logger.error("",ioe);
+      LOGGER.error("",ioe);
     }
     return ret;
   }
