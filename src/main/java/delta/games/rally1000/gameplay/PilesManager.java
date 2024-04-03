@@ -39,7 +39,7 @@ public class PilesManager
   public Card drawCard()
   {
     Card ret=null;
-    if (_drawPile.size()>0)
+    if (!_drawPile.isEmpty())
     {
       ret=_drawPile.remove(0);
     }

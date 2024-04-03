@@ -21,12 +21,11 @@ public class Rally1000Main
   /**
    * Main frame.
    */
-  // TODO beurk
   public static MainFrame _fp=null;
 
-  static void buildUI(Game game)
+  static void buildUI(GameEngine gameEngine)
   {
-    _fp=new MainFrame("Mille bornes",game);
+    _fp=new MainFrame("Mille bornes",gameEngine);
     _fp.setVisible(true);
   }
 
@@ -47,7 +46,7 @@ public class Rally1000Main
     teams.add(team2);
     List<Player> players=new ArrayList<Player>();
     Player player1=new Player("Joueur1");
-    // TODO use team1.addPlayer(player1)
+    team1.addPlayer(player1);
     player1.setTeam(team1);
     players.add(player1);
     Player player2=new Player("Joueur2");
@@ -60,12 +59,12 @@ public class Rally1000Main
     Player player4=new Player("Joueur4");
     player4.setTeam(team2);
     joueurs.add(player4);
-*/
+    */
     GameParameters params=new GameParameters();
     Game game=new Game(params, teams, players, deck);
     game.start();
-    buildUI(game);
     GameEngine engine=new GameEngine(game);
+    buildUI(engine);
     engine.play();
   }
 }

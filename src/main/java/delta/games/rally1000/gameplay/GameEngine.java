@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.Logger;
+
 import delta.common.utils.Tools;
 import delta.games.rally1000.Rally1000Main;
 import delta.games.rally1000.cards.Card;
@@ -20,20 +22,12 @@ import delta.games.rally1000.gameplay.players.SiliconPlayer;
  */
 public class GameEngine
 {
-  private static GameEngine _instance=null;
+  private static final Logger LOGGER=Logger.getLogger(GameEngine.class);
+
   private Game _game;
   private List<AbstractPlayerImpl> _playerImpl;
   private Player _currentPlayer;
   private AbstractAction _currentAction;
-
-  /**
-   * Get the sole instance of this class.
-   * @return the sole instance of this class.
-   */
-  public static GameEngine getInstance()
-  {
-    return _instance;
-  }
 
   /**
    * Constructor.
@@ -42,8 +36,6 @@ public class GameEngine
   public GameEngine(Game game)
   {
     _game=game;
-    // TODO beurk
-    _instance=this;
   }
 
   /**
@@ -93,7 +85,6 @@ public class GameEngine
       {
         public void run()
         {
-          // TODO beurk
           Rally1000Main._fp.repaint();
         }
       };
@@ -107,7 +98,7 @@ public class GameEngine
         PlayersHand playersHand=_game.getHand(i);
         Card drawnCard=pilesManager.drawCard();
         int nbCardsLeft=pilesManager.getNbAvailableCards();
-        System.out.println("Nb cards left: "+nbCardsLeft);
+        LOGGER.info("Nb cards left: "+nbCardsLeft);
         if (drawnCard!=null)
         {
           playersHand.addCard(drawnCard);
@@ -125,7 +116,7 @@ public class GameEngine
       }
       if (nbJoueursImpotents==nbPlayers)
       {
-        System.out.println("Players can't play anymore!");
+        LOGGER.info("Players can't play anymore!");
         break;
       }
       Team[] teams=_game.getTeams();
@@ -143,7 +134,7 @@ public class GameEngine
       if (winningTeam!=null)
       {
         // TODO display winner message
-        System.out.println("team "+winningTeam.getName()+" has won!");
+        LOGGER.info("Team "+winningTeam.getName()+" has won!");
         break;
       }
     }

@@ -19,7 +19,7 @@ public class ImagesManager
 {
   private static final Logger LOGGER=Logger.getLogger(ImagesManager.class);
 
-  private static final String CARDS_IMAGES_PACKAGE="delta/games/rally1000/resources/images/cards";
+  private static final String CARDS_IMAGES_PACKAGE="delta/games/rally1000/resources/images/cards/";
 
   private HashMap<String,Image> _cache;
   private HashMap<String,String> _mapCardNamesToImageNames;
@@ -59,7 +59,7 @@ public class ImagesManager
 
   private URL buildImageURL(String name)
   {
-    String fullResourcePath=CARDS_IMAGES_PACKAGE+"/"+name+".png";
+    String fullResourcePath=CARDS_IMAGES_PACKAGE+name+".png";
     URL url=getClass().getClassLoader().getResource(fullResourcePath);
     return url;
   }

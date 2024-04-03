@@ -143,42 +143,50 @@ public class ExposedCards
     }
     else if (family==CardFamily.PARADE)
     {
-      CardModel associatedSafety=cardModel.getAssociatedSafety();
-      if (!hasSafety(associatedSafety))
+      ret=canPlayParade(card);
+    }
+
+    return ret;
+  }
+
+  private boolean canPlayParade(Card card)
+  {
+    boolean ret=false;
+    CardModel cardModel=card.getModel();
+    CardModel associatedSafety=cardModel.getAssociatedSafety();
+    if (!hasSafety(associatedSafety))
+    {
+      if (cardModel==CardModel.END_OF_SPEED_LIMIT)
       {
-        if (cardModel==CardModel.END_OF_SPEED_LIMIT)
+        Card derniere=getLastSpeedLimitCard();
+        if ((derniere!=null)&&(derniere.getModel()==CardModel.SPEED_LIMIT))
         {
-          Card derniere=getLastSpeedLimitCard();
-          if ((derniere!=null)&&(derniere.getModel()==CardModel.SPEED_LIMIT))
+          ret=true;
+        }
+      }
+      else
+      {
+        if (_repairNeeded!=null)
+        {
+          if (_repairNeeded==cardModel)
           {
             ret=true;
           }
         }
         else
         {
-          if (_repairNeeded!=null)
+          if ((_greenLightNeeded) && (cardModel==CardModel.GREEN_LIGHT))
           {
-            if (_repairNeeded==cardModel)
-            {
-              ret=true;
-            }
-          }
-          else
-          {
-            if ((_greenLightNeeded) && (cardModel==CardModel.GREEN_LIGHT))
-            {
-              ret=true;
-            }
+            ret=true;
           }
         }
       }
     }
-
     return ret;
   }
 
   /**
-   * Indicates if the given card has a chance to be usefull or not.
+   * Indicates if the given card has a chance to be useful or not.
    * @param card Card to test.
    * @return <code>true</code> if it does, <code>false</code> otherwise.
    */
@@ -196,7 +204,7 @@ public class ExposedCards
     }
     else if (family==CardFamily.SAFETY)
     {
-      ret=true;
+      // Always OK
     }
     else if (family==CardFamily.PARADE)
     {
@@ -210,7 +218,7 @@ public class ExposedCards
     else if (family==CardFamily.ATTACK)
     {
       // todo handle the case where one other team has shown the matching safety
-      ret=true;
+      // Always OK
     }
     return ret;
   }
@@ -301,26 +309,32 @@ public class ExposedCards
     }
     else if (cardFamily==CardFamily.PARADE)
     {
-      if (cardModel==CardModel.END_OF_SPEED_LIMIT)
-      {
-        _speedLimitationStack.add(card);
-        _speedLimited=false;
-      }
-      else
-      {
-        _attacksStack.add(card);
-        _repairNeeded=null;
-        if (cardModel==CardModel.GREEN_LIGHT)
-        {
-          _greenLightNeeded=false;
-        }
-      }
+      putParade(card);
     }
     else
     {
       assert false;
     }
     canRunEvaluation();
+  }
+
+  private void putParade(Card card)
+  {
+    CardModel cardModel=card.getModel();
+    if (cardModel==CardModel.END_OF_SPEED_LIMIT)
+    {
+      _speedLimitationStack.add(card);
+      _speedLimited=false;
+    }
+    else
+    {
+      _attacksStack.add(card);
+      _repairNeeded=null;
+      if (cardModel==CardModel.GREEN_LIGHT)
+      {
+        _greenLightNeeded=false;
+      }
+    }
   }
 
   /**
@@ -330,7 +344,7 @@ public class ExposedCards
   public Card getLastCardOfAttackStack()
   {
     Card ret=null;
-    if (_attacksStack.size()>0)
+    if (!_attacksStack.isEmpty())
     {
       ret=_attacksStack.get(_attacksStack.size()-1);
     }
@@ -344,7 +358,7 @@ public class ExposedCards
   public Card getLastSpeedLimitCard()
   {
     Card ret=null;
-    if (_speedLimitationStack.size()>0)
+    if (!_speedLimitationStack.isEmpty())
     {
       ret=_speedLimitationStack.get(_speedLimitationStack.size()-1);
     }

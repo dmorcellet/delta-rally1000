@@ -1,5 +1,7 @@
 package delta.games.rally1000.gameplay.actions;
 
+import org.apache.log4j.Logger;
+
 import delta.games.rally1000.cards.Card;
 import delta.games.rally1000.gameplay.ExposedCards;
 import delta.games.rally1000.gameplay.Game;
@@ -11,6 +13,8 @@ import delta.games.rally1000.gameplay.Team;
  */
 public class PlayCardAction extends AbstractAction
 {
+  private static final Logger LOGGER=Logger.getLogger(PlayCardAction.class);
+
   private Team _team;
 
   /**
@@ -45,7 +49,10 @@ public class PlayCardAction extends AbstractAction
   {
     Card card=getCard();
     ExposedCards shownCards=_team.getExposedCards();
-    //System.out.println("Carte jouée :"+card+" sur jeu "+shownCards);
+    if (LOGGER.isDebugEnabled())
+    {
+      LOGGER.debug("Card: "+card+" put on: "+shownCards);
+    }
     shownCards.putCard(card, false);
   }
 

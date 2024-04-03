@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import delta.games.rally1000.gameplay.Game;
+import delta.games.rally1000.gameplay.GameEngine;
 import delta.games.rally1000.gameplay.Player;
 
 /**
@@ -19,17 +20,17 @@ import delta.games.rally1000.gameplay.Player;
  */
 public class MainFrame extends JFrame
 {
-  private Game _game;
+  private transient GameEngine _gameEngine;
 
   /**
    * Constructor.
    * @param title Window title.
-   * @param game Game to use.
+   * @param gameEngine Game engine.
    */
-  public MainFrame(String title, Game game)
+  public MainFrame(String title, GameEngine gameEngine)
   {
     super(title);
-    _game=game;
+    _gameEngine=gameEngine;
     buildMenuBar();
     buildGamePanel();
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,8 +39,9 @@ public class MainFrame extends JFrame
 
   private void buildGamePanel()
   {
-    Player player=_game.getPlayer(0);
-    FullGameFieldPanelController terrain=new FullGameFieldPanelController(_game, player);
+    Game game=_gameEngine.getGame();
+    Player player=game.getPlayer(0);
+    FullGameFieldPanelController terrain=new FullGameFieldPanelController(_gameEngine, player);
     JPanel mainPanel=terrain.getPanel();
     getContentPane().add(mainPanel);
   }

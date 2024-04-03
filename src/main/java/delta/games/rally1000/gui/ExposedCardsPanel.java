@@ -49,10 +49,9 @@ public class ExposedCardsPanel extends JPanel
 
   private static final int DELTA_Y_IN_KM_STACKS=CARD_HEIGHT/7;
 
-  // 8*5=40*25=1000
-  //private static final int NB_MAX_KM_CARDS=40;
+  // 1000/25 = 40 cards max ; use 8 stacks => 5 cards max per stack
   private static final int NB_KM_STACKS=8;
-  private static final int NB_MAX_CARDS_PER_STACK=5;//NB_MAX_KM_CARDS/NB_KM_STACKS+(((NB_MAX_KM_CARDS%NB_KM_STACKS)!=0)?1:0);
+  private static final int NB_MAX_CARDS_PER_STACK=5;
 
   private static final int X_PLAYERS_HAND=X_SAFETIES;
   private static final int DELTA_Y_KM_STACKS=(NB_MAX_CARDS_PER_STACK-1)*DELTA_Y_IN_KM_STACKS+CARD_HEIGHT;
@@ -61,12 +60,12 @@ public class ExposedCardsPanel extends JPanel
   private static final int X_SCORE=LEFT_MARGIN;
   private static final int Y_SCORE=TOP_MARGIN+CARD_HEIGHT/2;
 
-  private Game _game;
-  private Team _team;
-  private ExposedCards _shownCards;
-  private PlayersHand _playersHand;
+  private transient Game _game;
+  private transient Team _team;
+  private transient ExposedCards _shownCards;
+  private transient PlayersHand _playersHand;
   private boolean _showHand;
-  private ImagesManager _imagesMgr;
+  private transient ImagesManager _imagesMgr;
 
   /**
    * Constructor (opponent team view).

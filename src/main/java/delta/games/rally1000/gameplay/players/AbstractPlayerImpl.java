@@ -19,7 +19,7 @@ public abstract class AbstractPlayerImpl
    * @param engine Game engine.
    * @param player Player.
    */
-  public AbstractPlayerImpl(GameEngine engine, Player player)
+  protected AbstractPlayerImpl(GameEngine engine, Player player)
   {
     _engine=engine;
     _player=player;

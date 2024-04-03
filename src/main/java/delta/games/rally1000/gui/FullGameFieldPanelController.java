@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 import delta.games.rally1000.gameplay.Game;
+import delta.games.rally1000.gameplay.GameEngine;
 import delta.games.rally1000.gameplay.Player;
 import delta.games.rally1000.gameplay.Team;
 
@@ -21,17 +22,18 @@ public class FullGameFieldPanelController
 
   /**
    * Constructor.
-   * @param game Game to use.
+   * @param gameEngine Game engine.
    * @param player Main player (whose view is displayed).
    */
-  public FullGameFieldPanelController(Game game, Player player)
+  public FullGameFieldPanelController(GameEngine gameEngine, Player player)
   {
     ImagesManager imagesMgr=new ImagesManager();
-    _mine=new ExposedCardsController(game,player,imagesMgr);
+    _mine=new ExposedCardsController(gameEngine,player,imagesMgr);
     Team myTeam=player.getTeam();
+    Game game=gameEngine.getGame();
     Team[] otherTeams=game.getOtherTeams(myTeam);
     Team otherTeam=otherTeams[0];
-    _others=new ExposedCardsController(game,otherTeam,imagesMgr);
+    _others=new ExposedCardsController(gameEngine,otherTeam,imagesMgr);
     _panel=buildPanel();
   }
 

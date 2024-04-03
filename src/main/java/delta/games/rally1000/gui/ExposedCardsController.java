@@ -7,6 +7,8 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
+
 import delta.games.rally1000.cards.Card;
 import delta.games.rally1000.gameplay.Game;
 import delta.games.rally1000.gameplay.GameEngine;
@@ -22,7 +24,9 @@ import delta.games.rally1000.gameplay.actions.DiscardAction;
  */
 public class ExposedCardsController
 {
-  private Game _game;
+  private static final Logger LOGGER=Logger.getLogger(ExposedCardsController.class);
+
+  private GameEngine _gameEngine;
   private Team _team;
   private Player _player;
   private PlayersHand _playersHand;
@@ -31,31 +35,31 @@ public class ExposedCardsController
 
   /**
    * Constructor (opponent team view).
-   * @param game Associated game.
+   * @param gameEngine Game engine.
    * @param team Associated team.
    * @param imagesMgr Images manager.
    */
-  public ExposedCardsController(Game game, Team team, ImagesManager imagesMgr)
+  public ExposedCardsController(GameEngine gameEngine, Team team, ImagesManager imagesMgr)
   {
     super();
     _playersHand=null;
-    _canvas=new ExposedCardsPanel(game,team,imagesMgr);
-    init(game,team);
+    _canvas=new ExposedCardsPanel(gameEngine.getGame(),team,imagesMgr);
+    init(gameEngine,team);
   }
 
   /**
    * Constructor (main player view).
-   * @param game Associated game.
+   * @param gameEngine Game engine.
    * @param player Associated player.
    * @param imagesMgr Images manager.
    */
-  public ExposedCardsController(Game game, Player player, ImagesManager imagesMgr)
+  public ExposedCardsController(GameEngine gameEngine, Player player, ImagesManager imagesMgr)
   {
     super();
     _player=player;
     _playersHand=player.getHand();
-    _canvas=new ExposedCardsPanel(game,player,imagesMgr);
-    init(game,player.getTeam());
+    _canvas=new ExposedCardsPanel(gameEngine.getGame(),player,imagesMgr);
+    init(gameEngine,player.getTeam());
   }
 
   /**
@@ -67,9 +71,9 @@ public class ExposedCardsController
     return _canvas;
   }
 
-  private void init(Game game, Team team)
+  private void init(GameEngine gameEngine, Team team)
   {
-    _game=game;
+    _gameEngine=gameEngine;
     _team=team;
     if (_playersHand!=null)
     {
@@ -102,8 +106,8 @@ public class ExposedCardsController
   {
     if (action!=null)
     {
-      System.out.println("Selected action: "+action);
-      GameEngine.getInstance().postPlayerAction(_player,action);
+      LOGGER.info("Selected action: "+action);
+      _gameEngine.postPlayerAction(_player,action);
     }
   }
 
@@ -113,14 +117,18 @@ public class ExposedCardsController
     if ((button==MouseEvent.BUTTON1) || (button==MouseEvent.BUTTON3))
     {
       Point p=e.getPoint();
-      System.out.println(p);
+      if (LOGGER.isDebugEnabled())
+      {
+        LOGGER.debug("Click at: "+p);
+      }
       Card card=_canvas.getCardAt(p);
       if (card!=null)
       {
         AbstractAction action=null;
         if (button==MouseEvent.BUTTON1)
         {
-          action=_game.buildAction(_team,card);
+          Game game=_gameEngine.getGame();
+          action=game.buildAction(_team,card);
         }
         else
         {

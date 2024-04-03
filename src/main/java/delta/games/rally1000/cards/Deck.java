@@ -54,7 +54,7 @@ public class Deck
   public void shuffle()
   {
     int nbCartes=_cards.size();
-    Random random=new Random();
+    Random random=new Random(); // NOSONAR
     for(int i=0;i<200;i++)
     {
       int c1=random.nextInt(nbCartes);
